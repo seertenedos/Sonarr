@@ -15,11 +15,13 @@ namespace NzbDrone.Core.Update
     public class UpdatePackageProvider : IUpdatePackageProvider
     {
         private readonly IHttpClient _httpClient;
+        private readonly IRuntimeInfo _runtimeInfo;
         private readonly IHttpRequestBuilderFactory _requestBuilder;
 
-        public UpdatePackageProvider(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder)
+        public UpdatePackageProvider(IHttpClient httpClient, ISonarrCloudRequestBuilder requestBuilder, IRuntimeInfo runtimeInfo)
         {
             _httpClient = httpClient;
+            _runtimeInfo = runtimeInfo;
             _requestBuilder = requestBuilder.Services;
         }
 
@@ -29,6 +31,8 @@ namespace NzbDrone.Core.Update
                                          .Resource("/update/{branch}")
                                          .AddQueryParam("version", currentVersion)
                                          .AddQueryParam("os", OsInfo.Os.ToString().ToLowerInvariant())
+                                         .AddQueryParam("osver", OsInfo.Version)
+                                         .AddQueryParam("runtime", _runtimeInfo.RuntimeVersion)
                                          .SetSegment("branch", branch)
                                          .Build();
 

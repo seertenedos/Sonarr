@@ -109,7 +109,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
 			}
 
-            string lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
+            var lowerCurrentDir = Directory.GetCurrentDirectory().ToLower();
             if (lowerCurrentDir.Contains("teamcity")) return false;
             if (lowerCurrentDir.Contains("_output")) return false;
 

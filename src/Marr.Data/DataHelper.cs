@@ -109,7 +109,7 @@ namespace Marr.Data
             var memberExpression = (member.Body as MemberExpression);
             if (memberExpression == null)
             {
-                memberExpression = (member.Body as UnaryExpression).Operand as MemberExpression;
+                memberExpression = ((UnaryExpression) member.Body).Operand as MemberExpression;
             }
 
             return memberExpression.Member.Name;
@@ -120,7 +120,7 @@ namespace Marr.Data
             var memberExpression = (exp.Body as MemberExpression);
             if (memberExpression == null)
             {
-                memberExpression = (exp.Body as UnaryExpression).Operand as MemberExpression;
+                memberExpression = ((UnaryExpression) exp.Body).Operand as MemberExpression;
             }
 
             return memberExpression.Member.Name;
@@ -151,15 +151,15 @@ namespace Marr.Data
 
             return
                 underlyingType.IsPrimitive ||
-                underlyingType.Equals(typeof(string)) ||
-                underlyingType.Equals(typeof(DateTime)) ||
-                underlyingType.Equals(typeof(decimal)) ||
+                underlyingType == typeof(string) ||
+                underlyingType == typeof(DateTime) ||
+                underlyingType == typeof(decimal) ||
                 underlyingType.IsEnum;
         }
 
         public static bool IsNullableType(Type theType)
         {
-            return (theType.IsGenericType && theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)));
+            return (theType.IsGenericType && theType.GetGenericTypeDefinition() == typeof(Nullable<>));
         }
 
     }

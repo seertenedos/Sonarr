@@ -9,12 +9,8 @@ namespace NzbDrone.Common.Http
 
         static UserAgentBuilder()
         {
-            UserAgent = string.Format("Sonarr/{0} ({1} {2})",
-                BuildInfo.Version,
-                OsInfo.Os, OsInfo.Version.ToString(2));
-
-            UserAgentSimplified = string.Format("Sonarr/{0}",
-                BuildInfo.Version.ToString(2));
+            UserAgent = $"Sonarr/{BuildInfo.Version} ({OsInfo.Os} {OsInfo.Version.ToString(2)})";
+            UserAgentSimplified = $"Sonarr/{BuildInfo.Version.ToString(2)}";
         }
     }
 }

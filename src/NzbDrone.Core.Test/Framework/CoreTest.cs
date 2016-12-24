@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Cloud;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Http.Dispatchers;
 using NzbDrone.Common.TPL;
