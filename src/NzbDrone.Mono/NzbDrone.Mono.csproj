@@ -74,6 +74,7 @@
     <Compile Include="EnvironmentInfo\MonoRuntimeProvider.cs" />
     <Compile Include="Disk\ProcMount.cs" />
     <Compile Include="Disk\ProcMountProvider.cs" />
+    <Compile Include="EnvironmentInfo\LinuxVersionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Disk\SymbolicLinkResolver.cs" />
   </ItemGroup>
