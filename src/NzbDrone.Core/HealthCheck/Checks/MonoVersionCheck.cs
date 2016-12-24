@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 
@@ -11,7 +10,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
     {
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly Logger _logger;
-        private static readonly Regex VersionRegex = new Regex(@"(?<=\W|^)(?<version>\d+\.\d+(\.\d+)?(\.\d+)?)(?=\W)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public MonoVersionCheck(IRuntimeInfo runtimeInfo, Logger logger)
         {
@@ -26,30 +24,24 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType());
             }
 
-            var versionString = _runtimeInfo.RuntimeVersion;
-            var versionMatch = VersionRegex.Match(versionString);
+            var monoVersion = _runtimeInfo.RuntimeVersion;
 
-            if (versionMatch.Success)
+            if (monoVersion == new Version(3, 4, 0) && HasMonoBug18599())
             {
-                var version = new Version(versionMatch.Groups["version"].Value);
+                _logger.Debug("mono version 3.4.0, checking for mono bug #18599 returned positive.");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, "your mono version 3.4.0 has a critical bug, you should upgrade to a higher version");
+            }
 
-                if (version == new Version(3, 4, 0) && HasMonoBug18599())
-                {
-                    _logger.Debug("mono version 3.4.0, checking for mono bug #18599 returned positive.");
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, "your mono version 3.4.0 has a critical bug, you should upgrade to a higher version");
-                }
+            if (monoVersion == new Version(4, 4, 0) || monoVersion == new Version(4, 4, 1))
+            {
+                _logger.Debug("mono version {0}", monoVersion);
+                return new HealthCheck(GetType(), HealthCheckResult.Error, $"your mono version {monoVersion} has a bug that causes issues connecting to indexers/download clients");
+            }
 
-                if (version == new Version(4, 4, 0) || version == new Version(4, 4, 1))
-                {
-                    _logger.Debug("mono version {0}", version);
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, $"your mono version {version} has a bug that causes issues connecting to indexers/download clients");
-                }
-
-                if (version >= new Version(3, 10))
-                {
-                    _logger.Debug("mono version is 3.10 or better: {0}", version.ToString());
-                    return new HealthCheck(GetType());
-                }
+            if (monoVersion >= new Version(3, 10))
+            {
+                _logger.Debug("mono version is 3.10 or better: {0}", monoVersion.ToString());
+                return new HealthCheck(GetType());
             }
 
             return new HealthCheck(GetType(), HealthCheckResult.Warning, "mono version is less than 3.10, upgrade for improved stability");
@@ -70,7 +62,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return false;
             }
 
-            var fieldInfo = numberFormatterType.GetField("userFormatProvider", BindingFlags.Static | BindingFlags.NonPublic);
+            var fieldInfo = numberFormatterType.GetField("userFormatProvider",
+                BindingFlags.Static | BindingFlags.NonPublic);
 
             if (fieldInfo == null)
             {

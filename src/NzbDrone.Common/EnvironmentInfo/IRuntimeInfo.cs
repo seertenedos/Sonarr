@@ -1,4 +1,6 @@
-﻿namespace NzbDrone.Common.EnvironmentInfo
+﻿using System;
+
+namespace NzbDrone.Common.EnvironmentInfo
 {
     public interface IRuntimeInfo
     {
@@ -9,6 +11,6 @@
         bool IsRunning { get; set; }
         bool RestartPending { get; set; }
         string ExecutingApplication { get; }
-        string RuntimeVersion { get; }
+        Version RuntimeVersion { get; }
     }
 }

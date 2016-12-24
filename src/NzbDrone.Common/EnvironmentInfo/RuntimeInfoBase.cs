@@ -76,7 +76,7 @@ namespace NzbDrone.Common.EnvironmentInfo
         public bool RestartPending { get; set; }
         public string ExecutingApplication { get; private set; }
 
-        public abstract string RuntimeVersion { get; }
+        public abstract Version RuntimeVersion { get; }
 
         public static bool IsProduction { get; private set; }
 

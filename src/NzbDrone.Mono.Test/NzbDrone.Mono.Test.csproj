@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="DiskProviderTests\DiskProviderFixture.cs" />
     <Compile Include="DiskProviderTests\FreeSpaceFixture.cs" />
+    <Compile Include="EnvironmentInfo\MonoRuntimeProviderFixture.cs" />
     <Compile Include="EnvironmentInfo\LinuxVersionInfoFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

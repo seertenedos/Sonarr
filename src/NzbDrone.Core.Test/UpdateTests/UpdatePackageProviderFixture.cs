@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IRuntimeInfo>().SetupGet(c => c.RuntimeVersion).Returns("9.9.9");
+            Mocker.GetMock<IRuntimeInfo>().SetupGet(c => c.RuntimeVersion).Returns(new Version("9.9.9"));
         }
 
         [Test]
